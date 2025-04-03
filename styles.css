@@ -47,6 +47,13 @@ main {
     font-size: 1.2rem;
     
 }
+
+.info {
+  border: 2px solid hsl(281deg 100% 21%);
+  color: hsl(281deg 100% 21%);
+  padding: 3px;
+}
+
 .cash-input {
     display: flex;
     flex-direction: column;
