@@ -8,19 +8,6 @@
   padding: 0;
 }
 
-:root {
-  --dark-purple: #710692;
-  --light-grey: #e5ebf0;
-  --black: #000;
-  --white: #fff;
-  --grey: #3b3b4f;
-  --golden-yellow: #fecc4c;
-  --yellow: #ffcc4c;
-  --gold: #feac32;
-  --orange: #ffac33;
-  --dark-orange: #f89808;
-}
-
 body {
   font-family: "Paytone One", serif;
   background-image: linear-gradient(
@@ -44,7 +31,7 @@ body {
 }
 
 header {
-  color: var(--light-grey);
+  color: white;
   text-align: center;
 }
 
@@ -81,15 +68,15 @@ main {
     width: 40%;
     align-self: center;
     margin: 10px;
-    color: var(--black);
-    background-color: var(--gold);
-    background-image: linear-gradient(var(--golden-yellow), var(--orange));
-    border-color: var(--gold);
+    color: white;
+    background-color: hsl(304deg 100% 23%);
+    border-color: hsl(319deg 100% 30%);
     font-family: "Paytone One", serif;
   }
 
   .btn:hover:enabled {
-    background-image: linear-gradient(var(--yellow), var(--dark-orange));
+    background-image: linear-gradient(hsl(54, 100%, 50%), #f89808);
+    border-color: hsl(54, 100%, 50%);
   }
 
   .total {
@@ -145,7 +132,10 @@ main {
     width: 210px;
     height: 300px;
     padding: 20px;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    color: hsl(281deg 100% 21%);
+    font-weight: 450;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 15px solid hsl(48deg 100% 50%);
   }
 
   .register-bottom {
