@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css?family=Paytone+One");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --dark-purple: #710692;
+  --light-grey: #e5ebf0;
+  --black: #000;
+  --white: #fff;
+  --grey: #3b3b4f;
+  --golden-yellow: #fecc4c;
+  --yellow: #ffcc4c;
+  --gold: #feac32;
+  --orange: #ffac33;
+  --dark-orange: #f89808;
+}
+
+body {
+  font-family: "Paytone One", serif;
+  background-image: linear-gradient(
+    45deg,
+    hsl(240deg 100% 20%) 0%,
+    hsl(281deg 100% 21%) 8%,
+    hsl(304deg 100% 23%) 17%,
+    hsl(319deg 100% 30%) 25%,
+    hsl(329deg 100% 36%) 33%,
+    hsl(336deg 100% 41%) 42%,
+    hsl(346deg 83% 51%) 50%,
+    hsl(3deg 95% 61%) 58%,
+    hsl(17deg 100% 59%) 67%,
+    hsl(30deg 100% 55%) 75%,
+    hsl(40deg 100% 50%) 83%,
+    hsl(48deg 100% 50%) 92%,
+    hsl(54, 100%, 50%) 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+header {
+  color: var(--light-grey);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin: 25px 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+    
+}
+.cash-input {
+    display: flex;
+    flex-direction: column;
+   width: 40%;
+   text-align: center;
+   padding: 5px;
+   color:antiquewhite;
+}
+
+.cash-input input {
+    height: 40px;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.btn {
+    cursor: pointer;
+    height: 40px;
+    width: 40%;
+    align-self: center;
+    margin: 10px;
+    color: var(--black);
+    background-color: var(--gold);
+    background-image: linear-gradient(var(--golden-yellow), var(--orange));
+    border-color: var(--gold);
+    font-family: "Paytone One", serif;
+  }
+
+  .btn:hover:enabled {
+    background-image: linear-gradient(var(--yellow), var(--dark-orange));
+  }
+
+  .total {
+    border: solid 9px hsl(48deg 100% 50%);
+    padding: 1px;
+    text-align: center;
+    font-size: 1.1rem;
+    color:white;
+    width: 250px;
+    margin: 0 0 0 40px
+  }
+    
+  .neck {
+    background-color: hsl(48deg 100% 50%);
+    height: 30px;
+    width: 40px;
+    margin: 0 0 0 50px;
+  }
+
+  .register-body {
+    background-color: hsl(48deg 100% 50%);
+    width: 350px;
+    border-top-left-radius: 10%;
+    border-top-right-radius: 10%;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px;
+    height: 100%
+  }
+
+  /* register image */
+  .register-image {
+    padding: 20px;
+   height: 120px;
+   width: 120px;
+  }
+
+  .dot {
+    background-color: black;
+    height: 20px;
+    width: 20px;
+  }
+  .image-container {
+    display: flex;
+    justify-content: space-around;
+    align-content: space-around;
+    border: 3px solid hsl(48deg 100% 50%);
+  }
+
+  .register-content {
+    background-color: white;
+    width: 210px;
+    height: 300px;
+    padding: 20px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  }
+
+  .register-bottom {
+    background-color: hsl(48deg 100% 50%);
+    width: 350px;
+    height: 50px;
+    margin: 15px 0 0 0;
+    display: flex;
+    justify-content: center;    
+  }
+
+  .dot-bottom {
+    background-color: black;
+    height: 20px;
+    width: 20px;
+    align-self: center;
+    border-radius: 100%;
+  }
+
+
+
+

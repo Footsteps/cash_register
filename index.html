@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Register App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Cash Register Project</h1>
+    </header>
+
+    <main>
+            <div class="cash-input">
+                <label for="cash">Enter cash from customer</label>
+                <input type="number" name="cash" id="cash" value="cash" />
+                <button class="btn" id="purchase-btn" type="button">Purchase</button>
+            </div>
+            <div class="register">
+                <div class="total"><span id="total">Total: $3.26</div>
+                 <div class="neck"></div>
+                <div class="register-body">
+                    <div class="register-image">  
+                        <div class="image-container">          
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="image-container">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="image-container">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="register-content">
+                        <p><strong>Change in drawer:</strong></p>
+                        <p id="pennies">Pennies: $0.97 </p>
+                        <p id="nickels">Nickels: $2.05</p>
+                        <p id="dimes">Dimes: $2.9</p>
+                        <p id="quarters">Quarters: $3.75</p>
+                        <p id="ones">Ones: $89</p>
+                        <p id="fives">Fives: $50</p>
+                        <p id="tens">Tens: $0</p>
+                        <p id="twenties">Twenties: $60</p>
+                        <p id="hundreds">Hundreds: $100</p>
+                    </div>
+                </div>    
+                <div class="register-bottom">
+                    <div class="dot-bottom"></div>
+                </div>               
+            </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
