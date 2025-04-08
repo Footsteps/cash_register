@@ -9,19 +9,8 @@ let priceInCents = 0;
 let cashInCents = 0;
 let registerTotalInCents = 0;
 let changeDueInCents = 0;
+let cidInCents = [[]];
 
-//hard coded!
-let cidInCents = [
-  [1, 101],
-  [5, 41],
-  [10, 31],
-  [25, 17],
-  [100, 90],
-  [500, 11],
-  [1000, 2],
-  [2000, 3],
-  [10000, 5],
-];
 
 //chash-in-drawer
 let cid = [
@@ -36,6 +25,40 @@ let cid = [
   ["ONE HUNDRED", 100],
 ];
 
+const updateCidInCents = () => {
+  cid.forEach((el) => {
+    switch (el[0]) {
+      case "PENNY": 
+        cidInCents = [[1, el[1] / 0.01]];
+        break;
+      case "NICKEL": 
+         cidInCents.push([5, Math.round(el[1] / 0.05)]);
+          break;
+      case "DIME":
+        cidInCents.push([10, Math.round(el[1] / 0.1)]);
+        break;
+      case "QUARTER":
+        cidInCents.push([25, Math.round(el[1] / 0.25)]);
+        break;
+      case "ONE":
+        cidInCents.push([100, Math.round(el[1] / 1)]);
+        break;
+      case "FIVE":
+        cidInCents.push([500, Math.round(el[1] / 5)]);
+        break;
+      case "TEN":
+        cidInCents.push([1000, Math.round(el[1] / 10)]);
+        break;
+      case "TWENTY":
+        cidInCents.push([2000, Math.round(el[1] / 20)]);
+        break;
+      case "ONE HUNDRED":
+        cidInCents.push([10000, Math.round(el[1] / 100)]);
+        break;
+    }
+  })
+}
+
 //update price
 totalPrice.textContent = `Total: ${price}`;
 //401
@@ -45,34 +68,36 @@ const updateRegister = () => {
     cashInDrawer[i].textContent = cid[i][1];
   }
 };
- 
-const calculateChange = () => {
-  let changeFactor;
-  let there;
- 
-  if (changeDueInCents > 10000) {
-    changeFactor = Math.floor(changeDueInCents / cidInCents[8][0]);
-    there = cidInCents[8][1];
-    console.log(there);
-    console.log(changeFactor);
 
-    if (changeFactor < there) {
-      console.log("smaller");
-      changeDueInCents -= cidInCents[8][0] * changeFactor;
-      cidInCents[8][1] -= changeFactor;
-      let helper = cidInCents[8][0] / 100;
-      cid[8][1] = helper * cidInCents[8][1];
-    } else if (changeFactor > there || changeFactor == there) {
-      console.log("equal or bigger");
-      changeDueInCents -= cidInCents[8][0] * there;
-      cidInCents[8][1] = 0;
-      cid[8][1] = 0;
-    }
+const helperFunction = (x) => {
+  let changeFactor = Math.floor(changeDueInCents / cidInCents[x][0]);
+  let there = cidInCents[x][1];
+  console.log(there);
+  console.log(changeFactor);
+  console.log(changeDueInCents);
+
+  if (changeFactor < there) {
+    changeDueInCents -= cidInCents[x][0] * changeFactor;
+    cidInCents[x][1] -= changeFactor;
+    let helper = cidInCents[x][0] / 100;
+    cid[x][1] = helper * cidInCents[x][1];
+  } else if (changeFactor > there || changeFactor == there) {
+    changeDueInCents -= cidInCents[x][0] * there;
+    cidInCents[x][1] = 0;
+    cid[x][1] = 0;
   }
-
   console.log("after 100", changeDueInCents);
   console.log(cid);
   console.log(cidInCents);
+}
+ 
+const calculateChange = () => {
+ 
+  if (changeDueInCents > 10000) {
+    helperFunction(8);
+    
+   
+  }
   updateRegister();
 };
 
@@ -95,7 +120,7 @@ purchaseBtn.addEventListener("click", () => {
     for (let i = 0; i < cid.length; i++) {
       registerTotalInCents += cid[i][1] * 100;
     }
-
+    updateCidInCents();
     calculateChange();
   }
 });
