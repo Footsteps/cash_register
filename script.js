@@ -4,7 +4,7 @@ const purchaseBtn = document.getElementById("purchase-btn");
 const cashInDrawer = document.querySelectorAll(".cid > p > span");
 const changeDue = document.getElementById("change-due");
 
-let price = 1;
+let price = 1.25;
 let priceInCents = 0;
 let cashInCents = 0;
 let registerTotalInCents = 0;
@@ -72,9 +72,10 @@ const updateRegister = () => {
 const helperFunction = (x) => {
   let changeFactor = Math.floor(changeDueInCents / cidInCents[x][0]);
   let there = cidInCents[x][1];
+  console.log(changeDueInCents);
   console.log(there);
   console.log(changeFactor);
-  console.log(changeDueInCents);
+  
 
   if (changeFactor < there) {
     changeDueInCents -= cidInCents[x][0] * changeFactor;
@@ -86,17 +87,39 @@ const helperFunction = (x) => {
     cidInCents[x][1] = 0;
     cid[x][1] = 0;
   }
-  console.log("after 100", changeDueInCents);
+  console.log(`after ${x}`, changeDueInCents);
   console.log(cid);
   console.log(cidInCents);
 }
  
 const calculateChange = () => {
  
-  if (changeDueInCents > 10000) {
+  if (changeDueInCents >= 10000) {
     helperFunction(8);
-    
-   
+  }
+  if (changeDueInCents >= 2000) {
+    helperFunction(7);
+  }
+  if (changeDueInCents >= 1000) {
+    helperFunction(6);
+  }
+  if(changeDueInCents >= 500) {
+    helperFunction(5);
+  }
+  if(changeDueInCents >= 100) {
+    helperFunction(4);
+  }
+  if(changeDueInCents >= 25) {
+    helperFunction(3);
+  }
+  if(changeDueInCents >= 10) {
+    helperFunction(2);
+  }
+  if(changeDueInCents >= 5) {
+    helperFunction(1);
+  }
+  if(changeDueInCents) {
+    helperFunction(0);
   }
   updateRegister();
 };
