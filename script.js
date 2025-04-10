@@ -19,3 +19,67 @@ let cid = [
   ["ONE HUNDRED", 100],
 ];
 
+const calculateChange = () => {
+  const cashInCents = Math.round(parseFloat(cashInput.value) * 100);
+  const priceInCents = Math.round(price * 100);
+
+  if(cashInCents < priceInCents) {
+    alert("Customer does not have enough money to purchase the item");
+    cashInput.value = "";
+    return;
+  }
+
+  if (cashInCents === priceInCents) {
+    changeDue.innerHTML = `<p>No change due - customer paid with exact cash</p>`;
+    cashInput.value = "";
+    return;
+  }
+
+  let changeDue = cashInCents - priceInCents;
+
+  const reversedCidInCents = [...cid]
+  .reverse()
+  .map(([name, amount]) => [
+    name, Math.round(amount * 100)
+  ]);
+
+  console.log(reversedCidInCents);
+
+  
+
+}
+
+const updateHtml = change => {
+  const changeInRegisterNames = {
+    PENNY: 'Pennies',
+    NICKEL: 'Nickels',
+    DIME: 'Dimes',
+    QUARTER: 'Quarters',
+    ONE: 'Ones',
+    FIVE: 'Fives',
+    TEN: 'Tens',
+    TWENTY: 'Twenties',
+    'ONE HUNDRED': 'Hundreds'
+  }
+
+  cashInput.value = "";
+  totalPrice.textContent = `Total $${price}`;
+
+  cashInRegister.innerHTML = `
+  <p><strong>Change in drawer</strong><p>
+  ${cid.map(([name, amount]) =>
+    `<p>${changeInRegisterNames[name]}: $${amount}`
+   ).join("")
+
+  }
+  `
+}
+
+const checkCash = () => {
+  if (!cashInput.value) return;
+  calculateChange();
+}
+
+purchaseBtn.addEventListener("click", checkCash);
+
+updateHtml();
