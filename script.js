@@ -108,6 +108,10 @@ const cidUpdateFactorMathFunction = (x) => {
 }
  
 const calculateChange = () => {
+  if(changeDueInCents > registerTotalInCents) {
+    changeDue.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
+    return;
+  }
 
   if (changeDueInCents >= 10000) {
    cidUpdateFactorMathFunction(8);
