@@ -10,6 +10,7 @@ let cashInCents = 0;
 let registerTotalInCents = 0;
 let changeDueInCents = 0;
 let cidInCents = [[]];
+let changeToGive = [];
 
 
 //chash-in-drawer
@@ -59,69 +60,84 @@ const updateCidInCents = () => {
   })
 }
 
-//update price
 totalPrice.textContent = `Total: ${price}`;
-//401
-//update register
+
+//update cashInDrawer
 const updateRegister = () => {
   for (let i = 0; i < cid.length; i++) {
     cashInDrawer[i].textContent = cid[i][1];
   }
 };
 
-const helperFunction = (x) => {
+const updateChangeDue = () => {
+ changeDue.innerHTML = `
+ <p>Status: OPEN</>`
+ changeToGive.forEach((i) => 
+  changeDue.innerHTML += 
+ `<p>${i[0]}: $${i[1]}</p>`
+)
+
+}
+
+
+
+const cidUpdateFactorMathFunction = (x) => {
   let changeFactor = Math.floor(changeDueInCents / cidInCents[x][0]);
   let there = cidInCents[x][1];
-  console.log(changeDueInCents);
-  console.log(there);
-  console.log(changeFactor);
-  
+  let withdrawal = 0;
 
   if (changeFactor < there) {
+    //update dued change
     changeDueInCents -= cidInCents[x][0] * changeFactor;
+    //update CidInCents / what is in the register in cents
     cidInCents[x][1] -= changeFactor;
-    let helper = cidInCents[x][0] / 100;
-    cid[x][1] = helper * cidInCents[x][1];
-  } else if (changeFactor > there || changeFactor == there) {
+    //update cid / what is in the register in $
+    let cidUpdateFactor = cidInCents[x][0] / 100;
+    cid[x][1] = cidUpdateFactor * cidInCents[x][1];
+    //update given change
+    withdrawal = (cidInCents[x][0] * changeFactor) / 100;
+   changeToGive.push([cid[x][0], withdrawal]);
+  } else if (changeFactor >= there) {
     changeDueInCents -= cidInCents[x][0] * there;
     cidInCents[x][1] = 0;
     cid[x][1] = 0;
+    withdrawal = (there * cidInCents[x][0]) / 100;
+    changeToGive.push([cid[x][0], withdrawal]);
+   
   }
-  console.log(`after ${x}`, changeDueInCents);
-  console.log(cid);
-  console.log(cidInCents);
 }
  
 const calculateChange = () => {
- 
+
   if (changeDueInCents >= 10000) {
-    helperFunction(8);
+   cidUpdateFactorMathFunction(8);
   }
   if (changeDueInCents >= 2000) {
-    helperFunction(7);
+   cidUpdateFactorMathFunction(7);
   }
   if (changeDueInCents >= 1000) {
-    helperFunction(6);
+   cidUpdateFactorMathFunction(6);
   }
   if(changeDueInCents >= 500) {
-    helperFunction(5);
+   cidUpdateFactorMathFunction(5);
   }
   if(changeDueInCents >= 100) {
-    helperFunction(4);
+   cidUpdateFactorMathFunction(4);
   }
   if(changeDueInCents >= 25) {
-    helperFunction(3);
+   cidUpdateFactorMathFunction(3);
   }
   if(changeDueInCents >= 10) {
-    helperFunction(2);
+   cidUpdateFactorMathFunction(2);
   }
   if(changeDueInCents >= 5) {
-    helperFunction(1);
+   cidUpdateFactorMathFunction(1);
   }
   if(changeDueInCents) {
-    helperFunction(0);
+   cidUpdateFactorMathFunction(0);
   }
-  updateRegister();
+updateRegister();
+updateChangeDue();
 };
 
 purchaseBtn.addEventListener("click", () => {
@@ -147,5 +163,4 @@ purchaseBtn.addEventListener("click", () => {
     calculateChange();
   }
 });
-
 updateRegister();

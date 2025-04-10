@@ -48,10 +48,10 @@ main {
     
 }
 
-.info {
-  border: 2px solid hsl(281deg 100% 21%);
+.change-due {
   color: hsl(281deg 100% 21%);
   padding: 3px;
+  font-weight: lighter;
 }
 
 .cash-input {
