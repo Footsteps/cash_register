@@ -152,7 +152,7 @@ purchaseBtn.addEventListener("click", () => {
     return;
   } else if (difference == 0) {
     changeDue.innerHTML =
-      "<p class='info'>No changeFactor due - customer paid with exact cash</p>";
+      "<p class='info'>No change due - customer paid with exact cash</p>";
     cashInput.value = "";
     return;
   } else {

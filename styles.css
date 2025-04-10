@@ -54,6 +54,14 @@ main {
   font-weight: lighter;
 }
 
+.info {
+  border: 1px solid hsl(281deg 100% 21%);
+  color: hsl(281deg 100% 21%);
+  padding: 3px;
+  font-weight: lighter;
+}
+
+
 .cash-input {
     display: flex;
     flex-direction: column;
