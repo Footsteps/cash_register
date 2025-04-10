@@ -1,9 +1,9 @@
 //price-screen
-const totalPrice = document.getElementById("total");
+const totalPriceDiv = document.getElementById("total");
 const cashInput = document.getElementById("cash");
 const purchaseBtn = document.getElementById("purchase-btn");
-const cashInRegister = document.getElementById("register");
-const changeDue = document.getElementById("change-due");
+const cashInRegisterDiv = document.getElementById("register");
+const changeDueDiv = document.getElementById("change-due");
 
 let price = 1.25;
 
@@ -30,7 +30,7 @@ const calculateChange = () => {
   }
 
   if (cashInCents === priceInCents) {
-    changeDue.innerHTML = `<p>No change due - customer paid with exact cash</p>`;
+    changeDueDiv.innerHTML = `<p>No change due - customer paid with exact cash</p>`;
     cashInput.value = "";
     return;
   }
@@ -43,10 +43,44 @@ const calculateChange = () => {
     name, Math.round(amount * 100)
   ]);
 
-  console.log(reversedCidInCents);
+  const namedValuesInCents = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
+  const totalCid = reversedCidInCents.reduce((acc, [_, amount]) => acc + amount, 0);
+  const changeToGive = {status: 'OPEN', change: []};
 
+
+  if (totalCid < changeDue) {
+    changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`
+    return;
+  }
+
+  if(totalCid === changeDue) changeToGive.result = 'CLOSED';
   
+  for (let i = 0; i < reversedCidInCents.length; i++) {
+    if (changeDue >= namedValuesInCents[i] && changeDue > 0) {
+      const [name, amount] = reversedCidInCents[i];
+      const possibleChange = Math.min(amount, changeDue);
+      const changeFactor = Math.floor(possibleChange / namedValuesInCents[i]);
+      const amountUsedForChange = changeFactor * namedValuesInCents[i];
+      changeDue -= amountUsedForChange;
+      
+      if (changeFactor > 0) {
+        changeToGive.change.push([name, amountUsedForChange / 100])
+      }
+      
+    }
+  }
+  if (changeDue > 0) {
+    changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
+    return;
+  }
 
+  changeToGiveHTML(changeToGive.status, changeToGive.change);
+  updateHtml(changeToGive.change);
+
+}
+
+const changeToGiveHTML = (status, change) => {
+  changeDueDiv.innerHTML = `<p>Status: ${status}</p>`;
 }
 
 const updateHtml = change => {
@@ -60,12 +94,13 @@ const updateHtml = change => {
     TEN: 'Tens',
     TWENTY: 'Twenties',
     'ONE HUNDRED': 'Hundreds'
-  }
+  };
+
 
   cashInput.value = "";
-  totalPrice.textContent = `Total $${price}`;
+  totalPriceDiv.textContent = `Total $${price}`;
 
-  cashInRegister.innerHTML = `
+  cashInRegisterDiv.innerHTML = `
   <p><strong>Change in drawer</strong><p>
   ${cid.map(([name, amount]) =>
     `<p>${changeInRegisterNames[name]}: $${amount}`
