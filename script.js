@@ -1,4 +1,3 @@
-//price-screen
 const totalPriceDiv = document.getElementById("total");
 const cashInput = document.getElementById("cash");
 const purchaseBtn = document.getElementById("purchase-btn");
@@ -23,7 +22,7 @@ const calculateChange = () => {
   const cashInCents = Math.round(parseFloat(cashInput.value) * 100);
   const priceInCents = Math.round(price * 100);
 
-  if(cashInCents < priceInCents) {
+  if (cashInCents < priceInCents) {
     alert("Customer does not have enough money to purchase the item");
     cashInput.value = "";
     return;
@@ -37,83 +36,100 @@ const calculateChange = () => {
 
   let changeDue = cashInCents - priceInCents;
 
-  const reversedCidInCents = [...cid]
-  .reverse()
-  .map(([name, amount]) => [
-    name, Math.round(amount * 100)
-  ]);
+  const categoriesInCents = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
+  const cidReversed = [...cid]
+    .reverse()
+    .map(([category, amount]) => [category, Math.round(amount * 100)]);
+  const cidTotal = cidReversed.reduce((acc, [_, amount]) => acc + amount, 0);
+  const changeInformation = { status: "OPEN", change: [] };
 
-  const namedValuesInCents = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
-  const totalCid = reversedCidInCents.reduce((acc, [_, amount]) => acc + amount, 0);
-  const changeToGive = {status: 'OPEN', change: []};
-
-
-  if (totalCid < changeDue) {
-    changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`
+  if (cidTotal < changeDue) {
+    changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
     return;
   }
 
-  if(totalCid === changeDue) changeToGive.result = 'CLOSED';
-  
-  for (let i = 0; i < reversedCidInCents.length; i++) {
-    if (changeDue >= namedValuesInCents[i] && changeDue > 0) {
-      const [name, amount] = reversedCidInCents[i];
-      const possibleChange = Math.min(amount, changeDue);
-      const changeFactor = Math.floor(possibleChange / namedValuesInCents[i]);
-      const amountUsedForChange = changeFactor * namedValuesInCents[i];
-      changeDue -= amountUsedForChange;
-      
-      if (changeFactor > 0) {
-        changeToGive.change.push([name, amountUsedForChange / 100])
+  if (cidTotal === changeDue) {
+    changeInformation.status = "CLOSED";
+  }
+
+  for (let i = 0; i < cidReversed.length; i++) {
+    if (changeDue > categoriesInCents[i] && changeDue > 0) {
+      const [category, amount] = cidReversed[i];
+      const possibleChangeInCategory = Math.min(amount, changeDue);
+      const changeFactorOfCategory = Math.floor(
+        possibleChangeInCategory / categoriesInCents[i]
+      );
+      const amountInCategory = changeFactorOfCategory * categoriesInCents[i];
+      changeDue -= amountInCategory;
+
+      if (amountInCategory > 0) {
+        changeInformation.change.push([category, amountInCategory / 100]);
       }
-      
     }
   }
+
   if (changeDue > 0) {
     changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
     return;
   }
 
-  changeToGiveHTML(changeToGive.status, changeToGive.change);
-  updateHtml(changeToGive.change);
+  changeInformationFormatter(
+    changeInformation.status,
+    changeInformation.change
+  );
+  console.log(cid);
+  updateHtml(changeInformation.change);
+};
 
-}
-
-const changeToGiveHTML = (status, change) => {
+const changeInformationFormatter = (status, change) => {
   changeDueDiv.innerHTML = `<p>Status: ${status}</p>`;
-}
+  changeDueDiv.innerHTML += change.map(
+    ([category, amount]) => `<p>${category}: $${amount}</p>`
+  ).join("");
+};
 
-const updateHtml = change => {
-  const changeInRegisterNames = {
-    PENNY: 'Pennies',
-    NICKEL: 'Nickels',
-    DIME: 'Dimes',
-    QUARTER: 'Quarters',
-    ONE: 'Ones',
-    FIVE: 'Fives',
-    TEN: 'Tens',
-    TWENTY: 'Twenties',
-    'ONE HUNDRED': 'Hundreds'
+const updateHtml = (change) => {
+  const registerCategories = {
+    PENNY: "Pennies",
+    NICKEL: "Nickels",
+    DIME: "Dimes",
+    QUARTER: "Quarters",
+    ONE: "Ones",
+    FIVE: "Fives",
+    TEN: "Tens",
+    TWENTY: "Twenties",
+    "ONE HUNDRED": "Hundreds",
   };
-
 
   cashInput.value = "";
   totalPriceDiv.textContent = `Total $${price}`;
 
+  if (change) {
+    change.forEach(([categoryInChange, amountInChange]) => {
+      const changeArr = cid.find(
+        ([categoryInCid]) => categoryInCid === categoryInChange
+      );
+      changeArr[1] =
+        (Math.round(changeArr[1] * 100) - Math.round(amountInChange * 100)) /
+        100;
+    });
+  }
+
   cashInRegisterDiv.innerHTML = `
   <p><strong>Change in drawer</strong><p>
-  ${cid.map(([name, amount]) =>
-    `<p>${changeInRegisterNames[name]}: $${amount}`
-   ).join("")
-
-  }
-  `
-}
+  ${cid
+    .map(
+      ([category, amount]) =>
+        `<p>${registerCategories[category]}: $${amount}</p>`
+    )
+    .join("")}
+  `;
+};
 
 const checkCash = () => {
   if (!cashInput.value) return;
   calculateChange();
-}
+};
 
 purchaseBtn.addEventListener("click", checkCash);
 
