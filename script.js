@@ -22,44 +22,46 @@ const calculateChange = () => {
   const cashInCents = Math.round(parseFloat(cashInput.value) * 100);
   const priceInCents = Math.round(price * 100);
 
-  if (cashInCents < priceInCents) {
-    alert("Customer does not have enough money to purchase the item");
-    cashInput.value = "";
-    return;
-  }
-
   if (cashInCents === priceInCents) {
     changeDueDiv.innerHTML = `<p>No change due - customer paid with exact cash</p>`;
     cashInput.value = "";
     return;
   }
 
-  let changeDue = cashInCents - priceInCents;
+  if (cashInCents < priceInCents) {
+    alert("Customer does not have enough money to purchase the item");
+    cashInput.value = "";
+    return;
+  }
 
-  const categoriesInCents = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
-  const cidReversed = [...cid]
+  let changeDue = cashInCents - priceInCents;
+  const categoriesInCents = [10000, 2000, 1000, 500, 25, 10, 5, 1];
+  const reversedCidInCents = [...cid]
     .reverse()
     .map(([category, amount]) => [category, Math.round(amount * 100)]);
-  const cidTotal = cidReversed.reduce((acc, [_, amount]) => acc + amount, 0);
+  const cidTotalInCents = reversedCidInCents.reduce(
+    (acc, [_, amount]) => acc + amount,
+    0
+  );
   const changeInformation = { status: "OPEN", change: [] };
 
-  if (cidTotal < changeDue) {
+  if (cidTotalInCents < changeDue) {
     changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
     return;
   }
 
-  if (cidTotal === changeDue) {
+  if (cidTotalInCents === changeDue) {
     changeInformation.status = "CLOSED";
   }
 
-  for (let i = 0; i < cidReversed.length; i++) {
+  for (let i = 0; i < reversedCidInCents.length; i++) {
     if (changeDue > categoriesInCents[i] && changeDue > 0) {
-      const [category, amount] = cidReversed[i];
-      const possibleChangeInCategory = Math.min(amount, changeDue);
-      const changeFactorOfCategory = Math.floor(
+      const [category, amount] = reversedCidInCents[i];
+      const possibleChangeInCategory = Math.min(changeDue, amount);
+      const changeFactorInCategory = Math.round(
         possibleChangeInCategory / categoriesInCents[i]
       );
-      const amountInCategory = changeFactorOfCategory * categoriesInCents[i];
+      const amountInCategory = changeFactorInCategory * categoriesInCents[i];
       changeDue -= amountInCategory;
 
       if (amountInCategory > 0) {
@@ -67,28 +69,22 @@ const calculateChange = () => {
       }
     }
   }
-
-  if (changeDue > 0) {
+  if(changeDue > 0) {
     changeDueDiv.innerHTML = `<p>Status: INSUFFICIENT_FUNDS</p>`;
     return;
   }
 
-  changeInformationFormatter(
-    changeInformation.status,
-    changeInformation.change
-  );
-  console.log(cid);
-  updateHtml(changeInformation.change);
+  changeInformationUi(changeInformation.status, changeInformation.change);
+  updateUi(changeInformation.change);
 };
 
-const changeInformationFormatter = (status, change) => {
-  changeDueDiv.innerHTML = `<p>Status: ${status}</p>`;
-  changeDueDiv.innerHTML += change.map(
-    ([category, amount]) => `<p>${category}: $${amount}</p>`
-  ).join("");
+
+const checkCash = () => {
+  if (!cashInput.value) return;
+  calculateChange();
 };
 
-const updateHtml = (change) => {
+const updateUi = (change) => {
   const registerCategories = {
     PENNY: "Pennies",
     NICKEL: "Nickels",
@@ -104,33 +100,34 @@ const updateHtml = (change) => {
   cashInput.value = "";
   totalPriceDiv.textContent = `Total $${price}`;
 
-  if (change) {
-    change.forEach(([categoryInChange, amountInChange]) => {
-      const changeArr = cid.find(
-        ([categoryInCid]) => categoryInCid === categoryInChange
-      );
-      changeArr[1] =
-        (Math.round(changeArr[1] * 100) - Math.round(amountInChange * 100)) /
-        100;
-    });
+  if(change) {
+    change.forEach(
+      ([category, amount]) => {
+        const changeArr = cid.find(
+          ([categoryInCid]) => categoryInCid === category
+        );
+        changeArr[1] = (Math.round(changeArr[1] * 100) - Math.round(amount * 100)) / 100; 
+      });
   }
 
   cashInRegisterDiv.innerHTML = `
   <p><strong>Change in drawer</strong><p>
   ${cid
     .map(
-      ([category, amount]) =>
-        `<p>${registerCategories[category]}: $${amount}</p>`
+      ([category, amount]) => `
+    <p>${registerCategories[category]}: $${amount}</p>`
     )
     .join("")}
   `;
 };
 
-const checkCash = () => {
-  if (!cashInput.value) return;
-  calculateChange();
-};
+const changeInformationUi = (status, change) => {
+  changeDueDiv.innerHTML = `<p>Status: ${status}</p>`;
+  changeDueDiv.innerHTML += change.map(
+    ([category, amount]) => `<p>${category}: $${amount}</p>`
+  ).join("");
+}
 
 purchaseBtn.addEventListener("click", checkCash);
 
-updateHtml();
+updateUi();
